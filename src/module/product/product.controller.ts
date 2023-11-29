@@ -16,8 +16,7 @@ import { Response } from 'src/prototypes/formatters/response';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {
-  }
+  constructor(private readonly productService: ProductService) {}
 
   @Post()
   async create(@Body() dto: CreateProductDto) {
@@ -37,9 +36,9 @@ export class ProductController {
     return Response.updateSuccess(data);
   }
 
-  @Delete(':id')
-  async deleteProducts(@Body() dto: { ids: string[] }) {
+  @Delete()
+  async deleteProducts(@Body() dto: { ids: number[] }) {
     const data = await this.productService.deleteProducts(dto);
-    return Response.updateSuccess(data);
+    return Response.deleteSuccess(data);
   }
 }
