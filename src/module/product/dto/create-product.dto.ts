@@ -1,5 +1,4 @@
-import { Transform } from 'class-transformer';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -8,9 +7,10 @@ export class CreateProductDto {
   @IsString()
   alias: string;
 
+  @IsNumber()
+  price: number;
+
+  @IsString()
   @IsOptional()
   description: string;
-
-  @Transform(() => Number)
-  price: number;
 }
