@@ -1,7 +1,6 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
-import { AddTableMail1700555976577 } from './1700555976577-AddTableMail';
-
+import { CreateProductTable1701220015500 } from './1701220015500-create-product-table';
 config();
 
 export default new DataSource({
@@ -12,5 +11,5 @@ export default new DataSource({
   database: process.env.PG_DATABASE,
   port: +process.env.PG_PORT,
   entities: [],
-  migrations: [AddTableMail1700555976577],
+  migrations: [CreateProductTable1701220015500],
 });

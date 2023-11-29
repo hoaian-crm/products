@@ -15,9 +15,10 @@ import { ProductModule } from './module/product/product.module';
       database: process.env.PG_DATABASE,
       port: +process.env.PG_PORT,
       autoLoadEntities: true,
+      // logging: ['warn'],
       logging: process.env.NODE_ENV === 'development',
     }),
     ProductModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

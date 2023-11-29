@@ -1,26 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { FindProductDto } from './dto/find-product.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from './product.entity';
+import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(
+    @InjectRepository(Product) private productRepository: Repository<Product>,
+  ) { }
+
+  async findAndCount(query: FindProductDto) {
+    return await this.productRepository.findAndCount({
+      take: query.limit,
+      skip: query.offset,
+    });
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async create(dto: CreateProductDto) {
+    const checkExitsProduct = await this.productRepository.findOneBy({
+      alias: dto.alias,
+    });
+    if (!checkExitsProduct) {
+      const newProduct = this.productRepository.create(dto);
+      return this.productRepository.save(newProduct);
+    }
+    throw new BadRequestException('Alias doesnt exist');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async update(id: number, dto: UpdateProductDto) {
+    console.log(dto);
+    const product = await this.productRepository.findOneBy({ id: id });
+    if (!product) {
+      throw new BadRequestException('something went wrong');
+    }
+    console.log(dto);
+    product.name = dto.name ?? product.name;
+    product.alias = dto.alias ?? product.alias;
+    product.price = dto.price ?? product.price;
+    product.description = dto.description ?? product.description;
+
+    return this.productRepository.save(product);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async deleteProducts(dto: { ids: string[] }) {
   }
 }
