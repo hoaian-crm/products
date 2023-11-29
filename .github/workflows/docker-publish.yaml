@@ -91,9 +91,9 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
-      - name: Restart kubenetes
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-        with:
-          args: rollout restart deployment mail
+      # - name: Restart kubenetes
+      #   uses: actions-hub/kubectl@master
+      #   env:
+      #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      #   with:
+      #     args: rollout restart deployment mail
