@@ -2,32 +2,50 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { FindProductDto } from './dto/find-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { Repository, In } from 'typeorm';
+import { Repository, In, DataSource } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { TagsService } from '../tags/tags.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
+    private tagsService: TagsService,
+    private dataSource: DataSource,
   ) {}
 
   async findAndCount(query: FindProductDto) {
     return await this.productRepository.findAndCount({
+      relations: ['tags'],
       take: query.limit,
       skip: query.offset,
     });
   }
 
   async create(dto: CreateProductDto) {
-    const checkExitsProduct = await this.productRepository.findOneBy({
-      alias: dto.alias,
-    });
-    if (!checkExitsProduct) {
-      const newProduct = this.productRepository.create(dto);
-      return this.productRepository.save(newProduct);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const tags = await this.tagsService.findByIds(dto.tags);
+      await queryRunner.manager.save(tags);
+      const newProduct = this.productRepository.create({
+        ...dto,
+        tags,
+      });
+
+      await queryRunner.manager.save(newProduct);
+      await queryRunner.commitTransaction();
+
+      return newProduct;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
-    throw new BadRequestException('Alias doesnt exist');
   }
 
   async update(id: number, dto: UpdateProductDto) {
@@ -35,6 +53,7 @@ export class ProductService {
     if (!product) {
       throw new BadRequestException('something went wrong');
     }
+
     product.name = dto.name ?? product.name;
     product.alias = dto.alias ?? product.alias;
     product.price = dto.price ?? product.price;
@@ -55,5 +74,9 @@ export class ProductService {
       return pro['affected'];
     }
     throw new BadRequestException('something went wrong');
+  }
+
+  async sortTotalSold() {
+    return await this.productRepository.find({ order: { total_sold: 'DESC' } });
   }
 }

@@ -1,6 +1,9 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 import { CreateProductTable1701220015500 } from './1701220015500-create-product-table';
+import { UpdateV2Product1701313536586 } from './1701313536586-update-v2-product';
+import { Tags1701320123449 } from './1701320123449-tags';
+import { UpdateTagsForProduct1701331562567 } from './1701331562567-update-tags-for-product';
 config();
 
 export default new DataSource({
@@ -11,5 +14,10 @@ export default new DataSource({
   database: process.env.PG_DATABASE,
   port: +process.env.PG_PORT,
   entities: [],
-  migrations: [CreateProductTable1701220015500],
+  migrations: [
+    CreateProductTable1701220015500,
+    UpdateV2Product1701313536586,
+    Tags1701320123449,
+    UpdateTagsForProduct1701331562567,
+  ],
 });
