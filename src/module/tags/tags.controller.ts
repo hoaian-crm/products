@@ -22,7 +22,7 @@ export class TagsController {
   }
 
   @Post()
-  async createTags(@Body() body: Array<CreateTagDto>) {
+  async createTags(@Body() body: CreateTagDto) {
     try {
       const data = await this.tagsService.createTag(body);
       return Response.createSuccess(data);

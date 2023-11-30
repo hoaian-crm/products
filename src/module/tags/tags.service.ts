@@ -26,7 +26,7 @@ export class TagsService {
     return tags;
   }
 
-  async createTag(dto: Array<CreateTagDto>) {
+  async createTag(dto: CreateTagDto) {
     const tags = this.tagRepository.create(dto);
     return this.tagRepository.save(tags);
   }
