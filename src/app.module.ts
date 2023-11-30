@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './module/product/product.module';
+import { StatisticModule } from './module/statistic/statistic.module';
+import { TagsModule } from './module/tags/tags.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +21,8 @@ import { ProductModule } from './module/product/product.module';
       logging: process.env.NODE_ENV === 'development',
     }),
     ProductModule,
+    StatisticModule,
+    TagsModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

@@ -5,11 +5,13 @@ import { Product } from './product.entity';
 import { Repository, In } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { TagsService } from '../tags/tags.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
+    private readonly tagsRepository: TagsService,
   ) {}
 
   async findAndCount(query: FindProductDto) {
@@ -35,6 +37,7 @@ export class ProductService {
     if (!product) {
       throw new BadRequestException('something went wrong');
     }
+
     product.name = dto.name ?? product.name;
     product.alias = dto.alias ?? product.alias;
     product.price = dto.price ?? product.price;
@@ -56,5 +59,9 @@ export class ProductService {
     }
 
     throw new BadRequestException('something went wrong');
+  }
+
+  async sortTotalSold() {
+    return await this.productRepository.find({ order: { total_sold: 'DESC' } });
   }
 }
