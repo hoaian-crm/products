@@ -23,6 +23,12 @@ export class ProductService {
     });
   }
 
+  async findOne(id: number) {
+    return await this.productRepository.findBy({
+      id: id,
+    });
+  }
+
   async create(dto: CreateProductDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

@@ -13,6 +13,7 @@ import { FindProductDto } from './dto/find-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Response } from 'src/prototypes/formatters/response';
+import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller('products')
 export class ProductController {
@@ -28,6 +29,15 @@ export class ProductController {
   async findAndCount(@Query() query: FindProductDto) {
     const [result, count] = await this.productService.findAndCount(query);
     return Response.findSuccess([result, count]);
+  }
+
+  @Get('id')
+  @GrpcMethod('IProductController', 'Get')
+  async findOne(@Body() dto: { id: number }) {
+    console.log('dto', dto);
+    const data = await this.productService.findOne(dto.id);
+    console.log(data[0]);
+    return data[0];
   }
 
   @Patch(':id')
