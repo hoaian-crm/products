@@ -18,14 +18,25 @@ export class ProductService {
   async findAndCount(query: FindProductDto) {
     return await this.productRepository.findAndCount({
       relations: ['tags'],
+      order: {
+        createdAt: 'DESC',
+      },
       take: query.limit,
-      skip: query.offset,
+      skip: (query.offset - 1) * query.limit,
     });
   }
 
   async findOne(id: number) {
     return await this.productRepository.findBy({
       id: id,
+    });
+  }
+
+  async findMany(id: number[]) {
+    return await this.productRepository.find({
+      where: {
+        id: In(id),
+      },
     });
   }
 
