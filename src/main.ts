@@ -2,7 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { protobufPackage } from './prototypes/gen/ts/interfaces/product';
+import { protobufPackage } from 'crm-prototypes/dist/gen/ts/interfaces/product';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +12,7 @@ async function bootstrap() {
     options: {
       url: process.env.PRODUCT_GRPC || 'localhost:50051',
       package: protobufPackage,
-      protoPath: ['src/prototypes/interfaces/product.proto'],
+      protoPath: ['node_modules/crm-prototypes/interfaces/product.proto'],
       loader: {
         longs: Number,
       },
@@ -22,6 +22,6 @@ async function bootstrap() {
   app.startAllMicroservices();
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('/api/v1');
-  await app.listen(process.env.APP_PORT || 3001);
+  await app.listen(process.env.APP_PORT || 3000);
 }
 bootstrap();

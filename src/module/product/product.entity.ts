@@ -32,6 +32,9 @@ export class Product {
   @Column()
   description: string;
 
+  @Column()
+  disable: boolean;
+
   @ManyToMany(() => Tag)
   @JoinTable({
     name: 'product_tag',

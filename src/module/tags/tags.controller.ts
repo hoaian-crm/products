@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { FindTagsDto } from './dto/find-tags.dto';
-import { Response } from 'src/prototypes/formatters/response';
 import { CreateTagDto } from './dto/create-tag.dto';
+import { Response } from 'crm-prototypes';
 
 @Controller('tags')
 export class TagsController {

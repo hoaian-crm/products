@@ -21,6 +21,9 @@ export class ProductService {
       order: {
         createdAt: 'DESC',
       },
+      where: {
+        disable: false,
+      },
       take: query.limit,
       skip: (query.offset - 1) * query.limit,
     });
@@ -50,6 +53,7 @@ export class ProductService {
       await queryRunner.manager.save(tags);
       const newProduct = this.productRepository.create({
         ...dto,
+        disable: true,
         tags,
       });
 

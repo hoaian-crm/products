@@ -12,9 +12,8 @@ import { ProductService } from './product.service';
 import { FindProductDto } from './dto/find-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Response } from 'src/prototypes/formatters/response';
 import { GrpcMethod } from '@nestjs/microservices';
-import { IProductResponse } from 'src/prototypes/gen/ts/interfaces/product';
+import { Response, Product } from 'crm-prototypes';
 
 @Controller('products')
 export class ProductController {
@@ -41,7 +40,7 @@ export class ProductController {
   @GrpcMethod('IProductController', 'GetById')
   async findOneWithGrpc(
     @Body() dto: { id: number[] },
-  ): Promise<IProductResponse> {
+  ): Promise<Product.IProductResponse> {
     const data = await this.productService.findMany(dto.id);
     return {
       products: data,
