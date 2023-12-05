@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
@@ -31,10 +31,10 @@ export class ProductController {
     return Response.findSuccess([result, count]);
   }
 
-  @Get('id')
-  async findOne(@Param('id') id: string) {
-    const data = await this.productService.findOne(+id);
-    return data[0];
+  @Get(':alias')
+  async findOne(@Param('alias') alias: string) {
+    const data = await this.productService.findOne(alias);
+    return data;
   }
 
   @GrpcMethod('IProductController', 'GetById')
@@ -47,9 +47,12 @@ export class ProductController {
     };
   }
 
-  @Patch(':id')
-  async updateProduct(@Param('id') id: number, @Body() dto: UpdateProductDto) {
-    const data = await this.productService.update(id, dto);
+  @Put(':alias')
+  async updateProduct(
+    @Param('alias') alias: string,
+    @Body() dto: UpdateProductDto,
+  ) {
+    const data = await this.productService.update(alias, dto);
     return Response.updateSuccess(data);
   }
 

@@ -32,7 +32,7 @@ export class Product {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ select: false })
   disable: boolean;
 
   @ManyToMany(() => Tag)

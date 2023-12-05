@@ -1,4 +1,5 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Tag } from 'src/module/tags/tags.entity';
 
 export class UpdateProductDto {
   @IsOptional()
@@ -16,4 +17,8 @@ export class UpdateProductDto {
   @IsString()
   @IsOptional()
   description: string;
+
+  @IsArray()
+  @IsOptional()
+  tags: Tag[];
 }

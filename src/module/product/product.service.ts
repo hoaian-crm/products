@@ -29,9 +29,13 @@ export class ProductService {
     });
   }
 
-  async findOne(id: number) {
-    return await this.productRepository.findBy({
-      id: id,
+  async findOne(alias: string) {
+    return await this.productRepository.findOne({
+      where: {
+        alias: alias,
+        disable: false,
+      },
+      relations: ['tags'],
     });
   }
 
@@ -50,7 +54,6 @@ export class ProductService {
 
     try {
       const tags = await this.tagsService.findByIds(dto.tags);
-      await queryRunner.manager.save(tags);
       const newProduct = this.productRepository.create({
         ...dto,
         disable: false,
@@ -69,18 +72,50 @@ export class ProductService {
     }
   }
 
-  async update(id: number, dto: UpdateProductDto) {
-    const product = await this.productRepository.findOneBy({ id: id });
-    if (!product) {
-      throw new BadRequestException('something went wrong');
+  async update(alias: string, dto: UpdateProductDto) {
+    const product = await this.productRepository.findOne({
+      where: {
+        alias: alias,
+        disable: false,
+      },
+      relations: ['tags'],
+    });
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    product.disable = true;
+    const newProduct: Product = {
+      ...product,
+      disable: false,
+      name: dto.name ?? product.name,
+      alias: dto.alias ?? product.alias,
+      price: dto.price ?? product.price,
+      description: dto.description ?? product.description,
+      tags: dto.tags ?? product.tags,
+    };
+
+    try {
+      const tags = await this.tagsService.findByIds(newProduct.tags);
+      await queryRunner.manager.save(product);
+
+      delete newProduct.id;
+      const newPro = this.productRepository.create({
+        ...newProduct,
+        tags,
+      });
+
+      await queryRunner.manager.save(newPro);
+      await queryRunner.manager.save(product);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      console.log('error when update', error);
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
-
-    product.name = dto.name ?? product.name;
-    product.alias = dto.alias ?? product.alias;
-    product.price = dto.price ?? product.price;
-    product.description = dto.description ?? product.description;
-
-    return this.productRepository.save(product);
   }
 
   async deleteProducts(dto: { ids: number[] }) {
