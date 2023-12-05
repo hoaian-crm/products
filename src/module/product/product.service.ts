@@ -53,7 +53,7 @@ export class ProductService {
       await queryRunner.manager.save(tags);
       const newProduct = this.productRepository.create({
         ...dto,
-        disable: true,
+        disable: false,
         tags,
       });
 
