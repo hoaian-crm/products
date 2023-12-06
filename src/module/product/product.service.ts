@@ -25,7 +25,7 @@ export class ProductService {
         disable: false,
       },
       take: query.limit,
-      skip: (query.offset - 1) * query.limit,
+      skip: query.offset,
     });
   }
 
