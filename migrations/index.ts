@@ -5,6 +5,7 @@ import { UpdateV2Product1701313536586 } from './1701313536586-update-v2-product'
 import { Tags1701320123449 } from './1701320123449-tags';
 import { UpdateTagsForProduct1701331562567 } from './1701331562567-update-tags-for-product';
 import { DeleteTableProduct1701710170910 } from './1701710170910-delete-table-product';
+import { NewProduct1701877033366 } from './1701877033366-new-product';
 config();
 
 export default new DataSource({
@@ -21,5 +22,6 @@ export default new DataSource({
     Tags1701320123449,
     UpdateTagsForProduct1701331562567,
     DeleteTableProduct1701710170910,
+    NewProduct1701877033366,
   ],
 });
