@@ -56,6 +56,13 @@ export class ProductController {
     return Response.updateSuccess(data);
   }
 
+  @GrpcMethod('IProductController', 'UpdateTotalWhenBuild')
+  async buyProduct(@Body() dto: { alias: string; amount: number }) {
+    const product = await this.productService.buyProduct(dto.alias, dto.amount);
+    console.log('product ', product);
+    return product;
+  }
+
   @Delete()
   async deleteProducts(@Body() dto: { ids: number[] }) {
     const data = await this.productService.deleteProducts(dto);

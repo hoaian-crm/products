@@ -118,6 +118,21 @@ export class ProductService {
     }
   }
 
+  async buyProduct(alias: string, amount: number) {
+    const product = await this.productRepository.findOne({
+      where: {
+        alias: alias,
+        disable: false,
+      },
+    });
+
+    product.total_sold = product.total_sold + amount;
+
+    const newProduct = await this.productRepository.save(product);
+
+    return newProduct;
+  }
+
   async deleteProducts(dto: { ids: number[] }) {
     const products = await this.productRepository.findBy({
       id: In(dto.ids),
