@@ -1,12 +1,12 @@
-import { Optional } from '@nestjs/common';
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
 export class FindProductDto {
-  @Optional()
-  @Transform(() => Number)
-  limit: number;
+  @Type(() => Number)
+  @IsNumber()
+  limit: number = 10;
 
-  @Optional()
-  @Transform(() => Number)
-  offset: number;
+  @IsNumber()
+  @Type(() => Number)
+  offset: number = 0;
 }

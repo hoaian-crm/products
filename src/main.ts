@@ -20,7 +20,7 @@ async function bootstrap() {
   });
 
   app.startAllMicroservices();
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.setGlobalPrefix('/api/v1');
   await app.listen(process.env.APP_PORT || 3000);
 }
