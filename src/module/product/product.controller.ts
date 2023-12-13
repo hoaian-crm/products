@@ -34,6 +34,7 @@ export class ProductController implements Product.IProductController {
     };
   }
 
+  @GrpcMethod('IProductController', 'findManyByIds')
   async findManyByIds(
     request: Product.IdsDto,
   ): Promise<Product.ResponseFindMany> {
@@ -96,6 +97,7 @@ export class ProductController implements Product.IProductController {
   async incrementProduct(
     request: Product.dtoUpdateAmount,
   ): Promise<Product.ResponseFindOne> {
+    if (request.amount < 0) throw new Error('Amount cannot be be less than 0');
     const data = await this.productService.increment(
       request.alias,
       request.amount,
@@ -127,12 +129,6 @@ export class ProductController implements Product.IProductController {
     const data = await this.productService.findOneByAlias(alias);
     return data;
   }
-
-  // @GrpcMethod('IProductController', 'findManyByIds')
-  // async findOneWithGrpc(@Body() dto: { ids: number[] }) {
-  //   const data = await this.productService.findMany(dto.ids);
-  //   return { products: data };
-  // }
 
   @Put(':alias')
   async updateProduct(
