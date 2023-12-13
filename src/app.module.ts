@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './module/product/product.module';
-import { StatisticModule } from './module/statistic/statistic.module';
 import { TagsModule } from './module/tags/tags.module';
 @Module({
   imports: [
@@ -20,7 +19,6 @@ import { TagsModule } from './module/tags/tags.module';
       logging: process.env.NODE_ENV === 'development',
     }),
     ProductModule,
-    StatisticModule,
     TagsModule,
   ],
 })

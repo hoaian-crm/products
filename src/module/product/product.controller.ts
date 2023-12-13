@@ -9,17 +9,107 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { FindProductDto } from './dto/find-product.dto';
+import { Product, Response } from 'crm-prototypes';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FindProductDto } from './dto/find-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { GrpcMethod } from '@nestjs/microservices';
-import { Response } from 'crm-prototypes';
-import { IncrementDto } from './dto/whenOrder.dto';
 
 @Controller('products')
-export class ProductController {
+export class ProductController implements Product.IProductController {
   constructor(private readonly productService: ProductService) {}
 
+  async findOneByAlias(
+    request: Product.AliasDto,
+  ): Promise<Product.ResponseFindOne> {
+    const data = await this.productService.findOneByAlias(request.alias);
+    return {
+      alias: data.alias,
+      description: data.description,
+      discount: data.discount,
+      id: data.id,
+      name: data.name,
+      price: data.price,
+      totalSold: data.total_sold,
+    };
+  }
+
+  async findManyByIds(
+    request: Product.IdsDto,
+  ): Promise<Product.ResponseFindMany> {
+    const data = await this.productService.findManyByIds(request.ids);
+
+    return {
+      products: data.map((data) => ({
+        alias: data.alias,
+        description: data.description,
+        discount: data.discount,
+        id: data.id,
+        name: data.name,
+        price: data.price,
+        totalSold: data.total_sold,
+      })),
+    };
+  }
+
+  async findManyByAlias(
+    request: Product.ManyAliasDto,
+  ): Promise<Product.ResponseFindMany> {
+    console.log('request', request);
+    return {
+      products: [],
+    };
+  }
+
+  async findOneById(request: Product.IdDto): Promise<Product.ResponseFindOne> {
+    const data = await this.productService.findOneById(request.id);
+    return {
+      alias: data.alias,
+      description: data.description,
+      discount: data.discount,
+      id: data.id,
+      name: data.name,
+      price: data.price,
+      totalSold: data.total_sold,
+    };
+  }
+
+  async descrementProduct(
+    request: Product.dtoUpdateAmount,
+  ): Promise<Product.ResponseFindOne> {
+    const data = await this.productService.decrement(
+      request.alias,
+      request.amount,
+    );
+    return {
+      alias: data.alias,
+      description: data.description,
+      discount: data.discount,
+      id: data.id,
+      name: data.name,
+      price: data.price,
+      totalSold: data.total_sold,
+    };
+  }
+
+  @GrpcMethod('IProductController', 'incrementProduct')
+  async incrementProduct(
+    request: Product.dtoUpdateAmount,
+  ): Promise<Product.ResponseFindOne> {
+    const data = await this.productService.increment(
+      request.alias,
+      request.amount,
+    );
+    return {
+      alias: data.alias,
+      description: data.description,
+      discount: data.discount,
+      id: data.id,
+      name: data.name,
+      price: data.price,
+      totalSold: data.total_sold,
+    };
+  }
   @Post()
   async create(@Body() dto: CreateProductDto) {
     const data = await this.productService.create(dto);
@@ -34,15 +124,15 @@ export class ProductController {
 
   @Get(':alias')
   async findOne(@Param('alias') alias: string) {
-    const data = await this.productService.findOne(alias);
+    const data = await this.productService.findOneByAlias(alias);
     return data;
   }
 
-  @GrpcMethod('IProductController', 'findManyByIds')
-  async findOneWithGrpc(@Body() dto: { ids: number[] }) {
-    const data = await this.productService.findMany(dto.ids);
-    return { products: data };
-  }
+  // @GrpcMethod('IProductController', 'findManyByIds')
+  // async findOneWithGrpc(@Body() dto: { ids: number[] }) {
+  //   const data = await this.productService.findMany(dto.ids);
+  //   return { products: data };
+  // }
 
   @Put(':alias')
   async updateProduct(
@@ -53,14 +143,14 @@ export class ProductController {
     return Response.updateSuccess(data);
   }
 
-  @GrpcMethod('IProductController', 'incrementProduct')
+  // @GrpcMethod('IProductController', 'incrementProduct')
   // @UsePipes(new ValidationPipe({ transform: true }))
-  async incrementProduct(@Body() dto: IncrementDto) {
-    const product = await this.productService.increment(dto.alias, dto.amount);
-
-    console.log('product', product);
-    return product;
-  }
+  // async incrementProduct(@Body() dto: IncrementDto) {
+  //   const product = await this.productService.increment(dto.alias, dto.amount);
+  //
+  //   console.log('product', product);
+  //   return product;
+  // }
 
   @Delete()
   async deleteProducts(@Body() dto: { ids: number[] }) {

@@ -29,7 +29,17 @@ export class ProductService {
     });
   }
 
-  async findOne(alias: string) {
+  async findOneById(id: number) {
+    return await this.productRepository.findOne({
+      where: {
+        id: id,
+        disable: false,
+      },
+      relations: ['tags'],
+    });
+  }
+
+  async findOneByAlias(alias: string) {
     return await this.productRepository.findOne({
       where: {
         alias: alias,
@@ -39,10 +49,11 @@ export class ProductService {
     });
   }
 
-  async findMany(ids: number[]) {
+  async findManyByIds(ids: number[]) {
     return await this.productRepository.find({
       where: {
         id: In(ids),
+        disable: false,
       },
     });
   }
