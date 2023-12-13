@@ -39,10 +39,10 @@ export class ProductService {
     });
   }
 
-  async findMany(id: number[]) {
+  async findMany(ids: number[]) {
     return await this.productRepository.find({
       where: {
-        id: In(id),
+        id: In(ids),
       },
     });
   }
@@ -118,18 +118,15 @@ export class ProductService {
     }
   }
 
-  async buyProduct(alias: string, amount: number) {
+  async increment(alias: string, amount: number) {
     const product = await this.productRepository.findOne({
       where: {
         alias: alias,
         disable: false,
       },
     });
-
     product.total_sold = product.total_sold + amount;
-
     const newProduct = await this.productRepository.save(product);
-
     return newProduct;
   }
 

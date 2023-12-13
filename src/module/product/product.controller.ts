@@ -13,7 +13,8 @@ import { FindProductDto } from './dto/find-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { GrpcMethod } from '@nestjs/microservices';
-import { Response, Product } from 'crm-prototypes';
+import { Response } from 'crm-prototypes';
+import { incrementDto } from './dto/whenOrder.dto';
 
 @Controller('products')
 export class ProductController {
@@ -37,14 +38,10 @@ export class ProductController {
     return data;
   }
 
-  @GrpcMethod('IProductController', 'GetById')
-  async findOneWithGrpc(
-    @Body() dto: { id: number[] },
-  ): Promise<Product.IProductResponse> {
-    const data = await this.productService.findMany(dto.id);
-    return {
-      products: data,
-    };
+  @GrpcMethod('IProductController', 'findManyByIds')
+  async findOneWithGrpc(@Body() dto: { ids: number[] }) {
+    const data = await this.productService.findMany(dto.ids);
+    return { products: data };
   }
 
   @Put(':alias')
@@ -56,10 +53,9 @@ export class ProductController {
     return Response.updateSuccess(data);
   }
 
-  @GrpcMethod('IProductController', 'UpdateTotalWhenBuild')
-  async buyProduct(@Body() dto: { alias: string; amount: number }) {
-    const product = await this.productService.buyProduct(dto.alias, dto.amount);
-    console.log('product ', product);
+  @GrpcMethod('IProductController', 'incrementProduct')
+  async incrementProduct(@Body() dto: incrementDto) {
+    const product = await this.productService.increment(dto.alias, dto.amount);
     return product;
   }
 

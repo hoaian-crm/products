@@ -2175,10 +2175,10 @@ create-require@^1.1.0:
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
-crm-prototypes@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/crm-prototypes/-/crm-prototypes-1.0.6.tgz#127c2871dd9f6df2dea20c535d3fd2507a6be2ce"
-  integrity sha512-4ElwA7ipsxUZgt96rsM5ne3KCi+7GUZhBEw/Op0E2VOkheKfKQDuLniZqMcykwwUk6jY9+v73qcave95dp9URA==
+crm-prototypes@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/crm-prototypes/-/crm-prototypes-1.1.2.tgz#642d89a8bd2c6dd12896cb15035bbf45f370d400"
+  integrity sha512-2WINtJuUQ/MYlUqLb+SNVn21B39pP0PI3Ut+JjU7a0r7huaUO6/42KR/8rHlKpx9EGkECy7TycrPbzXratV5Hg==
   dependencies:
     protobufjs "^7.2.5"
     typescript "^5.3.2"
