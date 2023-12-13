@@ -1,8 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { protobufPackage } from 'crm-prototypes/dist/gen/ts/interfaces/product';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,9 +19,10 @@ async function bootstrap() {
     },
   });
 
-  app.startAllMicroservices();
+  const microServices = await app.startAllMicroservices();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.setGlobalPrefix('/api/v1');
+  microServices.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   await app.listen(process.env.APP_PORT || 3000);
 }
 bootstrap();
