@@ -14,7 +14,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Response } from 'crm-prototypes';
-import { incrementDto } from './dto/whenOrder.dto';
+import { IncrementDto } from './dto/whenOrder.dto';
 
 @Controller('products')
 export class ProductController {
@@ -54,8 +54,11 @@ export class ProductController {
   }
 
   @GrpcMethod('IProductController', 'incrementProduct')
-  async incrementProduct(@Body() dto: incrementDto) {
+  // @UsePipes(new ValidationPipe({ transform: true }))
+  async incrementProduct(@Body() dto: IncrementDto) {
     const product = await this.productService.increment(dto.alias, dto.amount);
+
+    console.log('product', product);
     return product;
   }
 

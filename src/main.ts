@@ -10,7 +10,7 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      url: process.env.PRODUCT_GRPC || 'localhost:5000',
+      url: process.env.PRODUCT_GRPC || 'localhost:50051',
       package: protobufPackage,
       protoPath: ['node_modules/crm-prototypes/interfaces/product.proto'],
       loader: {

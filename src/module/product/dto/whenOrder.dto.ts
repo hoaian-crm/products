@@ -1,12 +1,12 @@
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { IsNumber, IsString, Min } from 'class-validator';
 
-export class incrementDto {
+export class IncrementDto {
   @IsString()
   alias: string;
 
   @IsNumber()
-  @Transform(() => Number)
+  @Type(() => Number)
   @Min(1)
   amount: number;
 }
