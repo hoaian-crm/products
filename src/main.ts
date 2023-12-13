@@ -22,7 +22,9 @@ async function bootstrap() {
   const microServices = await app.startAllMicroservices();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.setGlobalPrefix('/api/v1');
-  microServices.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  microServices.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, transform: true }),
+  );
   await app.listen(process.env.APP_PORT || 3000);
 }
 bootstrap();
