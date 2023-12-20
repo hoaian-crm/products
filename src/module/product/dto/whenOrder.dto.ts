@@ -1,10 +1,9 @@
-import { IsNumber, IsString, Min } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class IncrementDto {
   @IsString()
   alias: string;
 
   @IsNumber()
-  @Min(1)
   amount: number;
 }
