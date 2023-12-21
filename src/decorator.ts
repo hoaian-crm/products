@@ -15,7 +15,7 @@ export const MetaScope: {
 } = {};
 
 export const ApiMetaData = (prop: ApiMetaDataProp) => {
-  return (target: any, field: string, descriptor: any) => {
+  return (target: object, field: string, descriptor: PropertyDescriptor) => {
     MetaScope[field] = {
       ...prop,
       route: Reflect.getMetadata(PATH_METADATA, descriptor.value),
@@ -25,8 +25,10 @@ export const ApiMetaData = (prop: ApiMetaDataProp) => {
 
 export const ControllerMetaData = () => {
   return (target: any) => {
-    console.log(target, Reflect.getMetadata(PATH_METADATA, target));
+    console.log('target', target, Reflect.getMetadata(PATH_METADATA, target));
+
     Object.keys(MetaScope).map((method) => {
+      console.log('metascope', method);
       (MetaScope[method].route = join(
         Reflect.getMetadata(PATH_METADATA, target),
         MetaScope[method].route || '',

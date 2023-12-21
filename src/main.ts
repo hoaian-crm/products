@@ -27,24 +27,7 @@ async function bootstrap() {
   microServices.useGlobalPipes(
     new ValidationPipe({ whitelist: true, transform: true }),
   );
-  await app.listen(process.env.APP_PORT || 3000);
 
-  // const server = app.getHttpServer();
-  //
-  // const router = server._events.request._router;
-  //
-  // const availableRoutes: [] = router.stack
-  //   .map((layer: any) => {
-  //     if (layer.route) {
-  //       return {
-  //         upstream: 'products',
-  //         path: layer.route?.path.replace(endpoint, ''),
-  //         method: (layer.route?.stack[0].method as string).toUpperCase(),
-  //       };
-  //     }
-  //   })
-  //   .filter((item: any) => item !== undefined);
-  //
-  // console.log(availableRoutes);
+  await app.listen(process.env.APP_PORT || 3000);
 }
 bootstrap();
