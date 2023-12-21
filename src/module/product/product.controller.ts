@@ -1,21 +1,13 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product, Response } from 'crm-prototypes';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { GrpcMethod } from '@nestjs/microservices';
+import { ApiMetaData, CustomController } from 'src/decorator';
 
-@Controller('products')
+@CustomController('products')
 export class ProductController implements Product.IProductController {
   constructor(private readonly productService: ProductService) {}
 
@@ -130,6 +122,7 @@ export class ProductController implements Product.IProductController {
     return data;
   }
 
+  @ApiMetaData({ name: 'djtme', description: 'djtme' })
   @Put(':alias')
   async updateProduct(
     @Param('alias') alias: string,
