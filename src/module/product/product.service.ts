@@ -5,14 +5,13 @@ import { Product } from './product.entity';
 import { Repository, In } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { TagsService } from '../tags/tags.service';
+import { Messages, Response } from '@hoaian-crm/prototypes';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
-    private readonly tagsRepository: TagsService,
-  ) {}
+  ) { }
 
   async findAndCount(query: FindProductDto) {
     return await this.productRepository.findAndCount({
@@ -29,7 +28,7 @@ export class ProductService {
       const newProduct = this.productRepository.create(dto);
       return this.productRepository.save(newProduct);
     }
-    throw new BadRequestException('Alias doesnt exist');
+    Response.badRequestThrow()
   }
 
   async update(id: number, dto: UpdateProductDto) {
@@ -47,18 +46,7 @@ export class ProductService {
   }
 
   async deleteProducts(dto: { ids: number[] }) {
-    const products = await this.productRepository.findBy({
-      id: In(dto.ids),
-    });
-
-    if (products.length === dto.ids.length) {
-      const pro = await this.productRepository.delete({
-        id: In(dto.ids),
-      });
-      return pro['affected'];
-    }
-
-    throw new BadRequestException('something went wrong');
+    return await this.productRepository.softDelete(dto.ids);
   }
 
   async sortTotalSold() {

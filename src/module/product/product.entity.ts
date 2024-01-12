@@ -1,13 +1,14 @@
+import { ResourceTag, TagRelation } from '@hoaian-crm/tags';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Tag } from '../tags/tags.entity';
 
 @Entity('products')
 export class Product {
@@ -30,17 +31,26 @@ export class Product {
   total_sold: number;
 
   @Column()
-  description: string;
+  image: string;
 
   @Column()
-  @ManyToMany(() => Tag)
-  @JoinTable({ name: 'product_tag' })
-  // @JoinColumn({}) //update late
-  tags: Tag[];
+  stock: number;
+
+  @Column()
+  inStock: boolean;
+
+  @Column()
+  description: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @TagRelation(Product)
+  tags: ResourceTag[]
 }

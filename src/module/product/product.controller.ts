@@ -12,11 +12,11 @@ import { ProductService } from './product.service';
 import { FindProductDto } from './dto/find-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Response } from 'src/prototypes/formatters/response';
+import { Response } from '@hoaian-crm/prototypes';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @Post()
   async create(@Body() dto: CreateProductDto) {
