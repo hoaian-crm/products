@@ -17,6 +17,7 @@ export class CreateProductDto {
   alias: string;
 
   @IsNumber()
+  @Type(() => Number)
   price: number;
 
   @IsString()

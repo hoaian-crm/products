@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './module/product/product.module';
 import { StatisticModule } from './module/statistic/statistic.module';
+import { LoggerModule } from '@relationc/logger';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,11 +17,11 @@ import { StatisticModule } from './module/statistic/statistic.module';
       database: process.env.PG_DATABASE,
       port: +process.env.PG_PORT,
       autoLoadEntities: true,
-      // logging: ['warn'],
-      logging: process.env.NODE_ENV === 'development',
+      logging: process.env.NODE_ENV === 'local',
     }),
     ProductModule,
     StatisticModule,
+    LoggerModule
   ],
 })
 export class AppModule { }

@@ -5,7 +5,7 @@ import { Product } from './product.entity';
 import { Repository, In } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Messages, Response } from '@hoaian-crm/prototypes';
+import { Messages, Response } from '@relationc/prototypes';
 
 @Injectable()
 export class ProductService {
@@ -21,14 +21,7 @@ export class ProductService {
   }
 
   async create(dto: CreateProductDto) {
-    const checkExitsProduct = await this.productRepository.findOneBy({
-      alias: dto.alias,
-    });
-    if (!checkExitsProduct) {
-      const newProduct = this.productRepository.create(dto);
-      return this.productRepository.save(newProduct);
-    }
-    Response.badRequestThrow()
+    return this.productRepository.save(dto);
   }
 
   async update(id: number, dto: UpdateProductDto) {

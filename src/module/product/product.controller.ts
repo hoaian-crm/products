@@ -7,21 +7,30 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { FindProductDto } from './dto/find-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Response } from '@hoaian-crm/prototypes';
+import { Response } from '@relationc/prototypes';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) { }
 
+  @UseInterceptors(FileInterceptor('image', {
+    limits: {
+      fileSize: 5000000 // 5MB
+    }
+  }))
   @Post()
-  async create(@Body() dto: CreateProductDto) {
-    const data = await this.productService.create(dto);
-    return Response.createSuccess(data);
+  async create(@Body() dto: CreateProductDto, @UploadedFile('image') file: Express.Multer.File) {
+    console.log("File is: ", file);
+    // const data = await this.productService.create(dto);
+    // return Response.createSuccess(data);
   }
 
   @Get()

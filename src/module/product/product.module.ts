@@ -3,7 +3,7 @@ import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { ResourceTagModule } from '@hoaian-crm/tags';
+import { ResourceTagModule } from '@relationc/tags';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product]), ResourceTagModule.register(Product)],

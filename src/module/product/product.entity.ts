@@ -1,11 +1,11 @@
-import { ResourceTag, TagRelation } from '@hoaian-crm/tags';
+import { ResourceTag, TagRelation } from '@relationc/tags';
+import { Type } from 'class-transformer';
+import { IsObject, IsOptional } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,7 +25,7 @@ export class Product {
   price: number;
 
   @Column()
-  discount: number;
+  discount: number = 0;
 
   @Column()
   total_sold: number;
