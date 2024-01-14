@@ -16,23 +16,39 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Response } from '@relationc/prototypes';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { MinioService } from '@relationc/minio-client';
+import { ApiMetaData, ControllerMetaData } from '@relationc/permissions';
 
+@ControllerMetaData("products", "Product")
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService, private minioService: MinioService) { }
 
+  @ApiMetaData({
+    name: "Create product",
+    description: "Allow create new product",
+    policy: "product:create",
+  })
+  @Post()
   @UseInterceptors(FileInterceptor('image', {
     limits: {
       fileSize: 5000000 // 5MB
     }
   }))
-  @Post()
-  async create(@Body() dto: CreateProductDto, @UploadedFile('image') file: Express.Multer.File) {
-    console.log("File is: ", file);
-    // const data = await this.productService.create(dto);
-    // return Response.createSuccess(data);
+  async create(@Body() dto: CreateProductDto, @UploadedFile() file: Express.Multer.File) {
+    if (file) {
+      const image = await this.minioService.uploadFile('crm', `images/products/${new Date().getTime()}.${file.originalname.split('.').pop()}`, file.buffer);
+      dto.image = image.etag;
+    }
+    const data = await this.productService.create(dto);
+    return Response.createSuccess(data);
   }
 
+  @ApiMetaData({
+    name: "Get products",
+    description: "Allow get many product",
+    policy: "product:get_all",
+  })
   @Get()
   async findAndCount(@Query() query: FindProductDto) {
     const [result, count] = await this.productService.findAndCount(query);

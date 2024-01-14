@@ -1,7 +1,6 @@
 import { ResourceTag, TagRelation } from '@relationc/tags';
-import { Type } from 'class-transformer';
-import { IsObject, IsOptional } from 'class-validator';
 import {
+  AfterLoad,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -27,7 +26,7 @@ export class Product {
   @Column()
   discount: number = 0;
 
-  @Column()
+  // @Column()
   total_sold: number;
 
   @Column()
@@ -53,4 +52,9 @@ export class Product {
 
   @TagRelation(Product)
   tags: ResourceTag[]
+
+  @AfterLoad()
+  getImageLink() {
+    this.image = process.env.PRODUCT_IMAGE_PREFIX + (this.image || 'default.png');
+  }
 }
