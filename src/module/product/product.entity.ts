@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { deprecate } from 'util';
 
 @Entity('products')
 export class Product {
@@ -17,7 +18,7 @@ export class Product {
   @Column()
   name: string;
 
-  @Column()
+  // @Column()
   alias: string;
 
   @Column()

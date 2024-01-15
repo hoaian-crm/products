@@ -13,9 +13,6 @@ export class CreateProductDto {
   @Type(() => Number)
   stock: number = 0;
 
-  @IsString()
-  alias: string;
-
   @IsNumber()
   @Type(() => Number)
   price: number;
