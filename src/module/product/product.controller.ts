@@ -61,8 +61,13 @@ export class ProductController {
     return Response.updateSuccess(data);
   }
 
+  @ApiMetaData({
+    name: "Delete product",
+    description: "Allow delte product",
+    policy: "product:delete"
+  })
   @Delete()
-  async deleteProducts(@Body() dto: { ids: number[] }) {
+  async deleteProducts(@Query() dto: { ids: number[] }) {
     const data = await this.productService.deleteProducts(dto);
     return Response.deleteSuccess(data);
   }
