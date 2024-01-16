@@ -37,8 +37,9 @@ export class ProductController {
   }))
   async create(@Body() dto: CreateProductDto, @UploadedFile() file: Express.Multer.File) {
     if (file) {
-      const image = await this.minioService.uploadFile('crm', `images/products/${new Date().getTime()}.${file.originalname.split('.').pop()}`, file.buffer);
-      dto.image = image.etag;
+      const name = `${new Date().getTime()}.${file.originalname.split('.').pop()}`;
+      await this.minioService.uploadFile('crm', `images/products/${name}`, file.buffer);
+      dto.image = name;
     }
     const data = await this.productService.create(dto);
     return Response.createSuccess(data);
