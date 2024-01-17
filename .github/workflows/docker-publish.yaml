@@ -12,11 +12,11 @@ on:
     tags: ["v*.*.*"]
 env:
   # Use docker.io for Docker Hub if empty
-  REGISTRY: docker.io
+  REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.IMAGE_NAME }}
-  REGISTRY_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-  REGISTRY_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  REGISTRY_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -31,8 +31,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
