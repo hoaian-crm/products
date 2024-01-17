@@ -16,7 +16,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.IMAGE_NAME }}
   REGISTRY_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-  REGISTRY_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWOR }}
+  REGISTRY_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
 jobs:
   build:
