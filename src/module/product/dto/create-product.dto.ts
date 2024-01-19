@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsNumber, IsOptional, IsString, isBoolean } from 'class-validator';
 
 export class CreateProductDto {
@@ -7,6 +7,7 @@ export class CreateProductDto {
 
   @IsBoolean()
   @IsOptional()
+  @Transform(({ value }) => value === 'true')
   inStock: boolean = true;
 
   @IsNumber()
